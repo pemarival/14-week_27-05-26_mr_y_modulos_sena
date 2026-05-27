@@ -1,0 +1,87 @@
+sena-management: {
+  PlaneacionAcademica: {
+    style.fill: "#D6EAF8"
+    style.stroke: "#2E86C1"
+
+    schedules: {
+      shape: sql_table
+
+      schedule_id: uuid {constraint: primary_key}
+      instructor_id: uuid {constraint: foreign_key}
+      classroom_id: uuid {constraint: foreign_key}
+      group_id: uuid {constraint: foreign_key}
+      schedule_date: date
+      start_time: time
+      end_time: time
+      modality: varchar
+      status: varchar
+      created_at: timestamp
+    }
+
+    student_groups: {
+      shape: sql_table
+
+      group_id: uuid {constraint: primary_key}
+      group_code: varchar
+      program_name: varchar
+      quarter: varchar
+      apprentice_count: integer
+      status: varchar
+      created_at: timestamp
+    }
+  }
+
+  GestionRecursosEducativos: {
+    style.fill: "#D5F5E3"
+    style.stroke: "#239B56"
+
+    instructors: {
+      shape: sql_table
+
+      instructor_id: uuid {constraint: primary_key}
+      full_name: varchar
+      instructor_type: varchar
+      email: varchar
+      max_hours_per_week: integer
+      status: varchar
+      created_at: timestamp
+    }
+
+    classrooms: {
+      shape: sql_table
+
+      classroom_id: uuid {constraint: primary_key}
+      code: varchar
+      name: varchar
+      capacity: integer
+      location: varchar
+      classroom_type: varchar
+      status: varchar
+      created_at: timestamp
+    }
+  }
+
+  SeguimientoFormativo: {
+    style.fill: "#FADBD8"
+    style.stroke: "#CB4335"
+
+    observations: {
+      shape: sql_table
+
+      observation_id: uuid {constraint: primary_key}
+      schedule_id: uuid {constraint: foreign_key}
+      observation_type: varchar
+      description: text
+      priority: varchar
+      created_at: timestamp
+    }
+  }
+
+  GestionRecursosEducativos.instructors.instructor_id -> PlaneacionAcademica.schedules.instructor_id
+
+  GestionRecursosEducativos.classrooms.classroom_id -> PlaneacionAcademica.schedules.classroom_id
+
+  PlaneacionAcademica.student_groups.group_id -> PlaneacionAcademica.schedules.group_id
+
+  PlaneacionAcademica.schedules.schedule_id -> SeguimientoFormativo.observations.schedule_id
+}
